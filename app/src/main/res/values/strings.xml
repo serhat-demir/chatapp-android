@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">ChatApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- login fragment -->
     <string name="title_login">Login</string>
     <string name="second_title_login">Login / Register</string>
     <string name="hint_username">Username</string>
     <string name="hint_pasword">Password</string>
     <string name="btn_register">Register</string>
     <string name="btn_login">Login</string>
+
+    <!-- chat fragment -->
     <string name="subtitle_chat">Welcome, %1$s</string>
+    <string name="hint_type_something">Type something…</string>
+    <string name="btn_send">Send</string>
 </resources>

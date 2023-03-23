@@ -8,27 +8,32 @@
             type="com.serhatd.chatapp.ui.chat.ChatViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="100"
         tools:context=".ui.chat.ChatFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="92"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/layoutMessageSend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/layoutMessageSend"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="100"
-            android:orientation="horizontal">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
@@ -42,11 +47,11 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/zero_radius"
                     android:backgroundTint="@color/gray"
+                    android:hint="@string/hint_type_something"
                     android:inputType="text"
                     android:lines="1"
-                    android:textSize="18sp"
                     android:maxLength="500"
-                    android:hint="Type something..." />
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -57,8 +62,8 @@
                 android:background="@drawable/zero_radius"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:textSize="18sp"
-                android:text="Send" />
+                android:text="@string/btn_send"
+                android:textSize="18sp" />
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
