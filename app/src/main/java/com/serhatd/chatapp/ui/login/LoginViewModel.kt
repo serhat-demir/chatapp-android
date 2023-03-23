@@ -18,6 +18,11 @@ class LoginViewModel @Inject constructor(private val callback: NetworkCallback, 
     val loginObserver = MutableLiveData<Boolean>()
 
     fun login(user_name: String, user_password: String) {
+        if (user_name.isEmpty() || user_password.isEmpty()) {
+            callback.onError("Enter username and password.")
+            return
+        }
+
         val userReq = UserRequest(user_name, user_password)
         viewModelScope.launch {
             val response = repo.login(userReq)
@@ -37,6 +42,11 @@ class LoginViewModel @Inject constructor(private val callback: NetworkCallback, 
     }
 
     fun register(user_name: String, user_password: String) {
+        if (user_name.isEmpty() || user_password.isEmpty()) {
+            callback.onError("Enter username and password.")
+            return
+        }
+
         val userReq = UserRequest(user_name, user_password)
         viewModelScope.launch {
             val response = repo.register(userReq)
