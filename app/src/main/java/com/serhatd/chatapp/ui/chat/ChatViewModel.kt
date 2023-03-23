@@ -47,6 +47,17 @@ class ChatViewModel @Inject constructor(private val callback: NetworkCallback, p
         }
     }
 
+    fun sendMessage(message: String) {
+        val token = getSession()[SharedPrefs.COL_USER_TOKEN]
+        if (token!!.isNotEmpty()) {
+            val data = JSONObject()
+            data.put("message", message)
+            data.put("token", token)
+
+            repo.emitEvent(socket, "message", data)
+        }
+    }
+
     fun getMessages() {
         val token = getSession()[SharedPrefs.COL_USER_TOKEN]
         if (token!!.isNotEmpty()) {

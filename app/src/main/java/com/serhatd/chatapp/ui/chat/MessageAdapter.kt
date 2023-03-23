@@ -2,6 +2,7 @@ package com.serhatd.chatapp.ui.chat
 
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +23,14 @@ class MessageAdapter(private val messages: List<Message>, private val currentUse
 
         if (messages[position].message_sender == currentUserName) {
             holder.binding.cardMessage.setHorizontalGravity(Gravity.END)
+        } else {
+            holder.binding.cardMessage.setHorizontalGravity(Gravity.START)
+        }
+
+        if (position > 0 && messages[position - 1].message_sender == messages[position].message_sender) {
+            holder.binding.txtSender.visibility = View.GONE
+        } else {
+            holder.binding.txtSender.visibility = View.VISIBLE
         }
     }
 
