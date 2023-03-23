@@ -20,7 +20,7 @@ class LoginViewModel @Inject constructor(private val callback: NetworkCallback, 
         viewModelScope.launch {
             val response = repo.login(userReq)
             if (response.isSuccessful && response.body() != null && response.body()!!.data != null) {
-                startSession(response.body()!!.data!!.user_token)
+                startSession(response.body()!!.data!!.user_name, response.body()!!.data!!.user_token)
                 loginObserver.value = true
             } else {
                 if (response.body() != null) callback.onError(response.body()!!.message)
@@ -42,8 +42,9 @@ class LoginViewModel @Inject constructor(private val callback: NetworkCallback, 
         }
     }
 
-    private fun startSession(token: String) {
+    private fun startSession(name: String, token: String) {
         val data = hashMapOf<String, String>()
+        data[SharedPrefs.COL_USER_NAME] = name
         data[SharedPrefs.COL_USER_TOKEN] = token
 
         prefs.setSharedPreference(data)

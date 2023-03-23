@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 
 class SharedPrefs(private val context: Context) {
     companion object {
+        const val COL_USER_NAME = "user_name"
         const val COL_USER_TOKEN = "user_token"
     }
 
