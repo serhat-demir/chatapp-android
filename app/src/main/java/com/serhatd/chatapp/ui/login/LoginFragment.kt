@@ -28,6 +28,19 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         (requireActivity() as MainActivity).binding.titleSuffix = getString(R.string.title_login)
 
+        binding.viewModel = viewModel
+        initObservers()
+
         return binding.root
+    }
+
+    private fun initObservers() {
+        viewModel.loginObserver.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it) {
+                    // navigate to chat fragment
+                }
+            }
+        }
     }
 }
