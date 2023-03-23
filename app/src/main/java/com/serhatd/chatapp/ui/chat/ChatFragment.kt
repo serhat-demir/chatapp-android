@@ -43,7 +43,7 @@ class ChatFragment : Fragment() {
     private fun initObservers() {
         viewModel.messages.observe(viewLifecycleOwner) {
             it?.let {
-                // init rv adapter
+                binding.recyclerView.adapter = MessageAdapter(it, viewModel.getSession()[SharedPrefs.COL_USER_NAME]!!)
             }
         }
 

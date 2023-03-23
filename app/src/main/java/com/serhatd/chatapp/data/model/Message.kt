@@ -3,9 +3,9 @@ package com.serhatd.chatapp.data.model
 import com.google.gson.annotations.SerializedName
 
 data class Message(
-    @SerializedName("message")
-    val message: String,
+    @SerializedName("message_text")
+    val message_text: String,
 
-    @SerializedName("sender")
-    val sender: String
+    @SerializedName("message_sender")
+    val message_sender: String
 )

@@ -20,8 +20,8 @@ class MessageAdapter(private val messages: List<Message>, private val currentUse
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         holder.binding.message = messages[position]
 
-        if (messages[position].sender == currentUserName) {
-            holder.binding.cardMessage.setHorizontalGravity(Gravity.CENTER_HORIZONTAL)
+        if (messages[position].message_sender == currentUserName) {
+            holder.binding.cardMessage.setHorizontalGravity(Gravity.END)
         }
     }
 

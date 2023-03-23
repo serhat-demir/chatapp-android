@@ -22,7 +22,7 @@
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/md_teal_700"
-            android:text="@{message.sender}" />
+            android:text="@{message.message_sender}" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
                 android:textColor="@color/white"
                 android:layout_marginVertical="4dp"
                 android:layout_marginHorizontal="8dp"
-                android:text="@{message.message}" />
+                android:text="@{message.message_text}" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 </layout>
