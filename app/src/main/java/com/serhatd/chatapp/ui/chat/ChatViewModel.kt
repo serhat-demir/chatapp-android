@@ -20,8 +20,11 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(private val callback: NetworkCallback, private val socket: Socket, private val prefs: SharedPrefs, private val repo: MessageRepository): ViewModel() {
     val messages = MutableLiveData<List<Message>>()
     val terminateSessionObserver = MutableLiveData<Boolean>()
+    val messageObserver = MutableLiveData<Boolean>()
 
     init {
+        socket.connect()
+
         repo.listenForEvent(socket, "message") { args ->
             viewModelScope.launch(Dispatchers.Main) {
                 val data: JSONObject = args[0] as JSONObject
@@ -60,6 +63,9 @@ class ChatViewModel @Inject constructor(private val callback: NetworkCallback, p
             data.put("token", token)
 
             repo.emitEvent(socket, "message", data)
+
+            messageObserver.value = true
+            messageObserver.value = false
         }
     }
 
@@ -92,6 +98,9 @@ class ChatViewModel @Inject constructor(private val callback: NetworkCallback, p
 
     fun endSession() {
         prefs.removeSharedPreference(arrayOf(SharedPrefs.COL_USER_NAME, SharedPrefs.COL_USER_TOKEN))
+        socket.disconnect()
+        socket.off("message")
+        socket.off("error")
     }
 
     override fun onCleared() {

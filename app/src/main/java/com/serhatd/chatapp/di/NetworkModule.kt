@@ -1,6 +1,7 @@
 package com.serhatd.chatapp.di
 
 import android.content.Context
+import android.util.Log
 import com.serhatd.chatapp.data.remote.MessageService
 import com.serhatd.chatapp.data.remote.UserService
 import com.serhatd.chatapp.ui.callback.NetworkCallback
@@ -48,6 +49,6 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideSocket(): Socket {
-        return IO.socket("http://192.168.1.39:3000").connect()
+        return IO.socket("http://192.168.1.39:3000")
     }
 }

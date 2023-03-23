@@ -41,8 +41,18 @@ class ChatFragment : Fragment() {
     private fun initObservers() {
         viewModel.terminateSessionObserver.observe(viewLifecycleOwner) {
             it?.let {
-                viewModel.endSession()
-                findNavController().popBackStack()
+                if (it) {
+                    viewModel.endSession()
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
+        viewModel.messageObserver.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it) {
+                    binding.txtMessage.setText("")
+                }
             }
         }
 
