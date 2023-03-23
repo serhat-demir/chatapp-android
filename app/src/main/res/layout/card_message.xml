@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="message"
+            type="com.serhatd.chatapp.data.model.Message" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/cardMessage"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtSender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/md_teal_700"
+            android:text="@{message.sender}" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/md_teal_400"
+            android:layout_marginTop="2dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="6dp">
+
+            <TextView
+                android:id="@+id/txtMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_marginVertical="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:text="@{message.message}" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</layout>
