@@ -9,6 +9,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.socket.client.IO
+import io.socket.client.Socket
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -41,5 +43,11 @@ class NetworkModule {
     @Provides
     fun provideNetworkCallback(@ApplicationContext context: Context): NetworkCallback {
         return NetworkCallback(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSocket(): Socket {
+        return IO.socket("http://192.168.1.39:3000").connect()
     }
 }

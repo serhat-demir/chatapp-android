@@ -10,12 +10,42 @@ import com.serhatd.chatapp.data.prefs.SharedPrefs
 import com.serhatd.chatapp.data.repository.MessageRepository
 import com.serhatd.chatapp.ui.callback.NetworkCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.socket.client.Socket
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(private val callback: NetworkCallback, private val prefs: SharedPrefs, private val repo: MessageRepository): ViewModel() {
+class ChatViewModel @Inject constructor(private val callback: NetworkCallback, private val socket: Socket, private val prefs: SharedPrefs, private val repo: MessageRepository): ViewModel() {
     val messages = MutableLiveData<List<Message>>()
+    val terminateSessionObserver = MutableLiveData<Boolean>()
+
+    init {
+        repo.listenForEvent(socket, "message") { args ->
+            viewModelScope.launch(Dispatchers.Main) {
+                val data: JSONObject = args[0] as JSONObject
+                val message = Message(data.getString("message_text"), data.getString("message_sender"))
+
+                if (messages.value == null) {
+                    messages.value = listOf<Message>().toMutableList().plus(message)
+                } else {
+                    messages.value = messages.value!!.toMutableList().plus(message)
+                }
+            }
+        }
+
+        repo.listenForEvent(socket, "error") { args ->
+            viewModelScope.launch(Dispatchers.Main) {
+                val data: JSONObject = args[0] as JSONObject
+                val message = data.getString("message")
+                callback.onError(message)
+
+                terminateSessionObserver.value = true
+                terminateSessionObserver.value = false
+            }
+        }
+    }
 
     fun getMessages() {
         val token = getSession()[SharedPrefs.COL_USER_TOKEN]
@@ -46,5 +76,12 @@ class ChatViewModel @Inject constructor(private val callback: NetworkCallback, p
 
     fun endSession() {
         prefs.removeSharedPreference(arrayOf(SharedPrefs.COL_USER_NAME, SharedPrefs.COL_USER_TOKEN))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        socket.disconnect()
+        socket.off("message")
+        socket.off("error")
     }
 }

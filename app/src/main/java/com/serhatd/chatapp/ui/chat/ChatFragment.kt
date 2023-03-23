@@ -1,16 +1,14 @@
 package com.serhatd.chatapp.ui.chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.serhatd.chatapp.MainActivity
 import com.serhatd.chatapp.R
 import com.serhatd.chatapp.data.prefs.SharedPrefs
@@ -41,9 +39,22 @@ class ChatFragment : Fragment() {
     }
 
     private fun initObservers() {
+        viewModel.terminateSessionObserver.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.endSession()
+                findNavController().popBackStack()
+            }
+        }
+
         viewModel.messages.observe(viewLifecycleOwner) {
             it?.let {
-                binding.recyclerView.adapter = MessageAdapter(it, viewModel.getSession()[SharedPrefs.COL_USER_NAME]!!)
+                val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                val adapter = MessageAdapter(it, viewModel.getSession()[SharedPrefs.COL_USER_NAME]!!)
+
+                binding.recyclerView.layoutManager = layoutManager
+                binding.recyclerView.adapter = adapter
+
+                layoutManager.scrollToPosition(adapter.itemCount - 1)
             }
         }
 
