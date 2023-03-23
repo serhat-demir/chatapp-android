@@ -270,4 +270,5 @@
 
     <color name="black">#181A18</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray">#DFDFDF</color>
 </resources>

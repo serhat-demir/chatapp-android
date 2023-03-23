@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:subtitle="@{subTitle}"
             app:subtitleTextColor="@color/white"
-            app:title='@{@string/app_name + " - " + titleSuffix}'
+            app:title='@{(titleSuffix == null) ? @string/app_name : @string/app_name + " - " + titleSuffix}'
             app:titleTextColor="@color/white" />
 
         <androidx.fragment.app.FragmentContainerView
