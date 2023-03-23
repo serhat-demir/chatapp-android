@@ -1,14 +1,18 @@
 package com.serhatd.chatapp.ui.login
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.serhatd.chatapp.data.model.ApiResponse
 import com.serhatd.chatapp.data.model.UserRequest
 import com.serhatd.chatapp.data.prefs.SharedPrefs
 import com.serhatd.chatapp.data.repository.UserRepository
 import com.serhatd.chatapp.ui.callback.NetworkCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,9 +26,14 @@ class LoginViewModel @Inject constructor(private val callback: NetworkCallback, 
             if (response.isSuccessful && response.body() != null && response.body()!!.data != null) {
                 startSession(response.body()!!.data!!.user_name, response.body()!!.data!!.user_token)
                 loginObserver.value = true
+                loginObserver.value = false
             } else {
-                if (response.body() != null) callback.onError(response.body()!!.message)
-                else callback.onError(response.message())
+                if (!response.isSuccessful || response.body() == null) {
+                    val error = Gson().fromJson(response.errorBody()!!.string(), ApiResponse::class.java)
+                    callback.onError(error.message)
+                } else {
+                    callback.onError(response.body()!!.message)
+                }
             }
         }
     }
@@ -36,8 +45,12 @@ class LoginViewModel @Inject constructor(private val callback: NetworkCallback, 
             if (response.isSuccessful && response.body() != null) {
                 callback.onSuccess(response.body()!!.message)
             } else {
-                if (response.body() != null) callback.onError(response.body()!!.message)
-                else callback.onError(response.message())
+                if (!response.isSuccessful || response.body() == null) {
+                    val error = Gson().fromJson(response.errorBody()!!.string(), ApiResponse::class.java)
+                    callback.onError(error.message)
+                } else {
+                    callback.onError(response.body()!!.message)
+                }
             }
         }
     }

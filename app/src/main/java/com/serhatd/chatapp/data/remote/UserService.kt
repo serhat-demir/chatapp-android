@@ -8,12 +8,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface UserService {
-    @POST("users")
+    @POST("login")
     suspend fun login(
         @Body user: UserRequest
     ): Response<ApiResponse<User>>
 
-    @POST("users")
+    @POST("register")
     suspend fun register(
         @Body user: UserRequest
     ): Response<ApiResponse<Nothing>>

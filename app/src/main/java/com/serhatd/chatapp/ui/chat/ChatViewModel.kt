@@ -3,6 +3,8 @@ package com.serhatd.chatapp.ui.chat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.serhatd.chatapp.data.model.ApiResponse
 import com.serhatd.chatapp.data.model.Message
 import com.serhatd.chatapp.data.prefs.SharedPrefs
 import com.serhatd.chatapp.data.repository.MessageRepository
@@ -23,8 +25,12 @@ class ChatViewModel @Inject constructor(private val callback: NetworkCallback, p
                 if (response.isSuccessful && response.body() != null && response.body()!!.data != null) {
                     messages.value = response.body()!!.data!!
                 } else {
-                    if (response.body() != null) callback.onError(response.body()!!.message)
-                    else callback.onError(response.message())
+                    if (!response.isSuccessful || response.body() == null) {
+                        val error = Gson().fromJson(response.errorBody()!!.string(), ApiResponse::class.java)
+                        callback.onError(error.message)
+                    } else {
+                        callback.onError(response.body()!!.message)
+                    }
                 }
             }
         }

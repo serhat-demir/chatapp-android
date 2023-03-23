@@ -1,13 +1,17 @@
 package com.serhatd.chatapp.ui.login
 
 import android.os.Bundle
+import android.util.Log
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.serhatd.chatapp.MainActivity
 import com.serhatd.chatapp.R
 import com.serhatd.chatapp.databinding.FragmentLoginBinding
@@ -27,10 +31,12 @@ class LoginFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         (requireActivity() as MainActivity).binding.titleSuffix = getString(R.string.title_login)
+        (requireActivity() as MainActivity).binding.subTitle = null
 
         binding.viewModel = viewModel
         initObservers()
 
+        hideMenu()
         return binding.root
     }
 
@@ -38,9 +44,19 @@ class LoginFragment : Fragment() {
         viewModel.loginObserver.observe(viewLifecycleOwner) {
             it?.let {
                 if (it) {
-                    // navigate to chat fragment
+                    findNavController().navigate(R.id.loginToChat)
                 }
             }
         }
+    }
+
+    private fun hideMenu() {
+        requireActivity().addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {}
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return false
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }

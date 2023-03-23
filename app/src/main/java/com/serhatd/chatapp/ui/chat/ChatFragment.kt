@@ -1,12 +1,16 @@
 package com.serhatd.chatapp.ui.chat
 
 import android.os.Bundle
+import android.util.Log
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.serhatd.chatapp.MainActivity
 import com.serhatd.chatapp.R
 import com.serhatd.chatapp.data.prefs.SharedPrefs
@@ -26,11 +30,13 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat, container, false)
+        (requireActivity() as MainActivity).binding.titleSuffix = null
         (requireActivity() as MainActivity).binding.subTitle = getString(R.string.subtitle_chat, viewModel.getSession()[SharedPrefs.COL_USER_NAME])
 
         binding.viewModel = viewModel
         initObservers()
 
+        createMenu()
         return binding.root
     }
 
@@ -40,5 +46,21 @@ class ChatFragment : Fragment() {
                 // init rv adapter
             }
         }
+
+        viewModel.getMessages()
+    }
+
+    private fun createMenu() {
+        requireActivity().addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_chat, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                viewModel.endSession()
+                findNavController().popBackStack()
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }
